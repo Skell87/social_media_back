@@ -16,7 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+# from app_image_upload.views import *
+from django.conf import settings
+from social_media_back_app.views import *
+# from .views import get_profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('profile/', get_profile),
+    path('create_user/', create_user),
+    path('refresh/', TokenRefreshView.as_view()),
+    path('token/', TokenObtainPairView.as_view()),
+    path('user_post/', user_post)
 ]
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
