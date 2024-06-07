@@ -95,3 +95,22 @@ def delete_post(request):
                   return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                   return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_post(request):
+      post_id = request.data.get('post_id')
+      content = request.data.get('content')
+
+      if not post_id or not content:
+            return Response({'error': "post id and content are required"}, status=status.HTTP_400_BAD_REQUEST)
+      
+      try:
+            post = UserPost.objects.get(id=post_id, user=request.user)
+            post.content=content
+            post.save()
+            return Response({'success': 'post updated successfully'}, status=status.HTTP_200_OK)
+      except UserPost.DoesNotExist:
+            return Response({'error': 'post not found'}, status=status.HTTP_404_NOT_FOUND)
+      except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

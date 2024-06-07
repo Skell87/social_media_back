@@ -34,6 +34,7 @@ urlpatterns = [
     path('user_post/', user_post),
     path('profile_posts/', profile_posts),
     path('delete_post/', delete_post),
+    path('update_post/', update_post)
 ]
 
 if settings.DEBUG:
