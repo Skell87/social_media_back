@@ -31,7 +31,9 @@ urlpatterns = [
     path('create_user/', create_user),
     path('refresh/', TokenRefreshView.as_view()),
     path('token/', TokenObtainPairView.as_view()),
-    path('user_post/', user_post)
+    path('user_post/', user_post),
+    path('profile_posts/', profile_posts),
+    path('delete_post/', delete_post),
 ]
 
 if settings.DEBUG:

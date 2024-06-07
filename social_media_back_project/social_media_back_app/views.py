@@ -73,6 +73,25 @@ def user_post(request):
             except Exception as e:
                   return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile_posts(request):
+      if request.method == 'GET':
+            user = request.user
+            posts = UserPost.objects.filter(user=user)
+            serializer = UserPostSerializer(posts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_post(request):
+      if request.method == 'POST':
+            post_id = request.data.get('post_id')
+            try:
+                  post = UserPost.objects.get(id=post_id, user=request.user)
+                  post.delete()
+                  return Response(status=status.HTTP_204_NO_CONTENT)
+            except UserPost.DoesNotExist:
+                  return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                  return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
